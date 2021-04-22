@@ -1,11 +1,10 @@
 <?php
-/* Configurable options */
 $theme = "dark";
 $title = "TinyVPS";
 $intro = "This is a simple website running on a <a href='https://contabo.com/'>Contabo</a> VPS.";
 $city = "Fürth";
 $country = "DE";
-$key = "f2871760abe75357599165759cf85bd3c";
+$key = "f2871760abe753575119065759cf85bd3c";
 $links = array(
 	array('lilut/', 'Lilut'),
 	array('https://tokyoma.de/', 'Tōkyō Made'),
@@ -38,7 +37,7 @@ $footer = "I really 🧡 <a href='https://www.paypal.com/paypalme/dmpop'>coffee<
 		<p>
 			<?php echo $intro; ?>
 		</p>
-		<h3><span style="color: gray;">Weather in <?php echo $city ?>:</span>
+		<h4><span style="color: gray;">Weather in <?php echo $city ?>:</span>
 			<?php
 			$request = "https://api.openweathermap.org/data/2.5/weather?APPID=$key&q=$city,$country&units=metric&cnt=7&lang=en&units=metric&cnt=7";
 			$response = file_get_contents($request);
@@ -50,7 +49,24 @@ $footer = "I really 🧡 <a href='https://www.paypal.com/paypalme/dmpop'>coffee<
 			//Get wind speed
 			echo $data['wind']['speed'] . "m/s";
 			?>
-		</h3>
+		</h4>
+		<h3>System info</h3>
+		<hr>
+		<?php
+		$uname = shell_exec("uname -mnr");
+		$cpuusage = 100 - shell_exec("vmstat | tail -1 | awk '{print $15}'");
+		$mem = shell_exec("free | grep Mem | awk '{print $3/$2 * 100.0}'");
+		$mem = round($mem, 1);
+		if (isset($uname)) {
+			echo "<p>" . $uname . "</p>";
+		}
+		if (isset($cpuusage) && is_numeric($cpuusage)) {
+			echo '<span style="color: gray;">CPU load:</span> <strong>' . $cpuusage . '%</strong> ';
+		}
+		if (isset($mem) && is_numeric($mem)) {
+			echo '<span style="color: gray;">Memory:</span> <strong>' . $mem . '%</strong>';
+		}
+		?>
 	</div>
 	<h3>Links</h3>
 	<hr>
