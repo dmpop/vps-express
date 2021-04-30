@@ -4,9 +4,9 @@ $title = "TinyVPS";
 $intro = "This is a simple website running on a <a href='https://contabo.com/'>Contabo</a> VPS.";
 $city = "Fürth";
 $country = "DE";
-$key = "f2871760abe7575931575759cf85bd3c";
+$key = "f2871760abe7551904065759cf85bd3c";
 $links = array(
-	array('lilut/', 'Lilut'),
+	array('https://lilut.xyz', 'Lilut'),
 	array('https://tokyoma.de/', 'Tōkyō Made'),
 	array('https://github.com/dmpop', 'GitHub')
 );
@@ -37,20 +37,79 @@ $footer = "I really 🧡 <a href='https://www.paypal.com/paypalme/dmpop'>coffee<
 		<p>
 			<?php echo $intro; ?>
 		</p>
-		<h4><span style="color: gray;">🌤️ <?php echo $city ?>:</span>
-			<?php
-			$request = "https://api.openweathermap.org/data/2.5/weather?APPID=$key&q=$city,$country&units=metric&cnt=7&lang=en&units=metric&cnt=7";
-			$response = file_get_contents($request);
-			$data = json_decode($response, true);
-			//Get current Temperature in Celsius
-			echo round($data['main']['temp'], 0) . "°C, ";
-			//Get weather condition
-			echo $data['weather'][0]['main'] . ", ";
-			//Get wind speed
-			echo $data['wind']['speed'] . "m/s";
-			?>
-		</h4>
 	</div>
+	<h3>🌤️ Weather in <?php echo $city ?></h3>
+	<hr>
+	<p>
+		<?php
+		$request = "https://api.openweathermap.org/data/2.5/forecast?APPID=$key&q=$city,$country&units=metric&cnt=7&lang=en&units=metric&cnt=7";
+		$response = file_get_contents($request);
+		$data = json_decode($response, true);
+		//Get current temperature in Celsius
+		echo round($data['list'][0]['main']['temp'], 0) . "°C, ";
+		//Get weather condition
+		echo $data['list'][0]['weather'][0]['description'] . ", ";
+		//Get wind speed
+		echo $data['list'][0]['wind']['speed'] . " m/s";
+		echo "<table style='margin-top: 1.5em;'>";
+		// Today + 1
+		echo "<tr>";
+		echo "<td>";
+		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 1 day" )) . ':</span> ';
+		echo "</td>";
+		echo "<td>";
+		echo round($data['list'][1]['main']['temp'], 0) . "°C, ";
+		echo $data['list'][1]['weather'][0]['description'] . ", ";
+		echo $data['list'][1]['wind']['speed'] . " m/s";
+		echo "</td>";
+		echo "</tr>";
+		// Today + 2
+		echo "<tr>";
+		echo "<td>";
+		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 2 days" )) . ':</span> ';
+		echo "</td>";
+		echo "<td>";
+		echo round($data['list'][2]['main']['temp'], 0) . "°C, ";
+		echo $data['list'][2]['weather'][0]['description'] . ", ";
+		echo $data['list'][2]['wind']['speed'] . " m/s";
+		echo "</td>";
+		echo "</tr>";
+		// Today + 3
+		echo "<tr>";
+		echo "<td>";
+		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 3 days" )) . ':</span> ';
+		echo "</td>";
+		echo "<td>";
+		echo round($data['list'][3]['main']['temp'], 0) . "°C, ";
+		echo $data['list'][3]['weather'][0]['description'] . ", ";
+		echo $data['list'][3]['wind']['speed'] . " m/s";
+		echo "</td>";
+		echo "</tr>";
+		// Today + 4
+		echo "<tr>";
+		echo "<td>";
+		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 4 days" )) . ':</span> ';
+		echo "</td>";
+		echo "<td>";
+		echo round($data['list'][4]['main']['temp'], 0) . "°C, ";
+		echo $data['list'][4]['weather'][0]['description'] . ", ";
+		echo $data['list'][4]['wind']['speed'] . " m/s";
+		echo "</td>";
+		echo "</tr>";
+		// Today + 5
+		echo "<tr>";
+		echo "<td>";
+		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 5 days" )) . ':</span> ';
+		echo "</td>";
+		echo "<td>";
+		echo round($data['list'][5]['main']['temp'], 0) . "°C, ";
+		echo $data['list'][5]['weather'][0]['description'] . ", ";
+		echo $data['list'][5]['wind']['speed'] . " m/s";
+		echo "</td>";
+		echo "</tr>";
+		echo "</table>";
+		?>
+	</p>
 	<h3>🖥️ System info</h3>
 	<hr>
 	<?php
