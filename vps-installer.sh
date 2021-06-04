@@ -15,6 +15,7 @@ apt update
 apt upgrade
 apt install apache2 php libapache2-mod-php
 apt install certbot python3-certbot-apache
+apt install git fail2ban
 
 echo "----------------------------------------"
 echo " Specify new user name (example: monkey)"
