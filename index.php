@@ -54,23 +54,10 @@ include('config.php');
 		$request = "https://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$lon&units=metric&cnt=7&lang=en&units=metric&cnt=7&appid=$key";
 		$response = file_get_contents($request);
 		$data = json_decode($response, true);
-		echo "<h3>🌤️ Weather in " . $data['city']['name'] . "</h3>";
+		echo "<h3>🌤️ Weather forecast for " . $data['city']['name'] . "</h3>";
 		echo "<hr>";
-		echo "<div style='margin-bottom: 1em; text-align: center;'><a href='geo:" . $lat . "," . $lon . "'>Show on map</a></div>";
-		//Get current temperature in Celsius
-		echo "<div><span style='color: gray;'>Temp:</span> " . round($data['list'][0]['temp']['day'], 0) . "°C</div>";
-		//Get weather condition
-		echo "<div><span style='color: gray;'>Conditions:</span> " . $data['list'][0]['weather'][0]['description'] . "</div>";
-		//Get wind speed
-		echo "<div><span style='color: gray;'>Wind speed:</span> " . $data['list'][0]['speed'] . " m/s, ";
-		//Get rain probability
-		echo "<div><span style='color: gray;'>Rain probability:</span> " . $data['list'][0]['rain'] . " %";
-		echo "<div><span style='color: gray;'>Sunrise:</span> " . date("H:i", $data['list'][0]['sunrise']);
-		echo "<div><span style='color: gray;'>Sunset:</span> " . date("H:i", $data['list'][0]['sunset']);
-
-		echo "<h4>Weather forecast</h4>";
 		echo "<table style='margin-top: 1.5em;'>";
-		for ($i = 1; $i <= 6; $i++) {
+		for ($i = 0; $i <= 6; $i++) {
 			echo "<tr>";
 			echo "<td>";
 			echo ' <span style="color: gray;">' . date("l", strtotime("+ $i day")) . ':</span> ';
