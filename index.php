@@ -1,20 +1,5 @@
 <?php
-$theme = "dark";
-$title = "TinyVPS";
-$intro = "This is a simple website running on a <a href='https://contabo.com/'>Contabo</a> VPS.";
-$city = "Fürth";
-$country = "DE";
-$key = "f2871760abe7551904065759cf85bd3c";
-$links = array(
-	array('https://lilut.xyz', 'Lilut'),
-	array('https://tokyoma.de/', 'Tōkyō Made'),
-	array('https://github.com/dmpop', 'GitHub')
-);
-$feeds = array(
-	"https://lowendbox.com/feed/"
-
-);
-$footer = "I really 🧡 <a href='https://www.paypal.com/paypalme/dmpop'>coffee</a>";
+include('config.php');
 ?>
 
 <html lang="en" data-theme="<?php echo $theme; ?>">
@@ -37,76 +22,68 @@ $footer = "I really 🧡 <a href='https://www.paypal.com/paypalme/dmpop'>coffee<
 		<h1 style="margin-top: 0em; letter-spacing: 3px; color: #cc6600;"><?php echo $title; ?></h1>
 		<p>
 			<?php echo $intro; ?>
+			<img style="margin-top: 1em; margin-bottom: 1em; border-radius: 5px;" src="https://source.unsplash.com/daily">
 		</p>
 	</div>
-	<h3>🌤️ Weather in <?php echo $city ?></h3>
-	<hr>
+	<p id="geolocation"></p>
+	<script>
+		window.onload = getLocation();
+		var x = document.getElementById("geolocation");
+
+		function getLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(currentPosition);
+			} else {
+				x.innerHTML = "Geolocation is not supported.";
+			}
+		}
+
+		function currentPosition(position) {
+			document.cookie = "posLat = ; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+			document.cookie = "posLon = ; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+			document.cookie = "posLat = " + position.coords.latitude;
+			document.cookie = "posLon = " + position.coords.longitude;
+		}
+	</script>
 	<p>
 		<?php
-		$request = "https://api.openweathermap.org/data/2.5/forecast?APPID=$key&q=$city,$country&units=metric&cnt=7&lang=en&units=metric&cnt=7";
+		setcookie("posLat", "", time() - 3600);
+		setcookie("posLon", "", time() - 3600);
+		$lat = $_COOKIE['posLat'];
+		$lon = $_COOKIE['posLon'];
+		$request = "https://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$lon&units=metric&cnt=7&lang=en&units=metric&cnt=7&appid=$key";
 		$response = file_get_contents($request);
 		$data = json_decode($response, true);
+		echo "<h3>🌤️ Weather in " . $data['city']['name'] . "</h3>";
+		echo "<hr>";
+		echo "<div style='margin-bottom: 1em; text-align: center;'><a href='geo:" . $lat . "," . $lon . "'>Show on map</a></div>";
 		//Get current temperature in Celsius
-		echo round($data['list'][0]['main']['temp'], 0) . "°C, ";
+		echo "<div><span style='color: gray;'>Temp:</span> " . round($data['list'][0]['temp']['day'], 0) . "°C</div>";
 		//Get weather condition
-		echo $data['list'][0]['weather'][0]['description'] . ", ";
+		echo "<div><span style='color: gray;'>Conditions:</span> " . $data['list'][0]['weather'][0]['description'] . "</div>";
 		//Get wind speed
-		echo $data['list'][0]['wind']['speed'] . " m/s";
+		echo "<div><span style='color: gray;'>Wind speed:</span> " . $data['list'][0]['speed'] . " m/s, ";
+		//Get rain probability
+		echo "<div><span style='color: gray;'>Rain probability:</span> " . $data['list'][0]['rain'] . " %";
+		echo "<div><span style='color: gray;'>Sunrise:</span> " . date("H:i", $data['list'][0]['sunrise']);
+		echo "<div><span style='color: gray;'>Sunset:</span> " . date("H:i", $data['list'][0]['sunset']);
+
+		echo "<h4>Weather forecast</h4>";
 		echo "<table style='margin-top: 1.5em;'>";
-		// Today + 1
-		echo "<tr>";
-		echo "<td>";
-		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 1 day" )) . ':</span> ';
-		echo "</td>";
-		echo "<td>";
-		echo round($data['list'][1]['main']['temp'], 0) . "°C, ";
-		echo $data['list'][1]['weather'][0]['description'] . ", ";
-		echo $data['list'][1]['wind']['speed'] . " m/s";
-		echo "</td>";
-		echo "</tr>";
-		// Today + 2
-		echo "<tr>";
-		echo "<td>";
-		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 2 days" )) . ':</span> ';
-		echo "</td>";
-		echo "<td>";
-		echo round($data['list'][2]['main']['temp'], 0) . "°C, ";
-		echo $data['list'][2]['weather'][0]['description'] . ", ";
-		echo $data['list'][2]['wind']['speed'] . " m/s";
-		echo "</td>";
-		echo "</tr>";
-		// Today + 3
-		echo "<tr>";
-		echo "<td>";
-		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 3 days" )) . ':</span> ';
-		echo "</td>";
-		echo "<td>";
-		echo round($data['list'][3]['main']['temp'], 0) . "°C, ";
-		echo $data['list'][3]['weather'][0]['description'] . ", ";
-		echo $data['list'][3]['wind']['speed'] . " m/s";
-		echo "</td>";
-		echo "</tr>";
-		// Today + 4
-		echo "<tr>";
-		echo "<td>";
-		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 4 days" )) . ':</span> ';
-		echo "</td>";
-		echo "<td>";
-		echo round($data['list'][4]['main']['temp'], 0) . "°C, ";
-		echo $data['list'][4]['weather'][0]['description'] . ", ";
-		echo $data['list'][4]['wind']['speed'] . " m/s";
-		echo "</td>";
-		echo "</tr>";
-		// Today + 5
-		echo "<tr>";
-		echo "<td>";
-		echo ' <span style="color: gray;">'. date("l", strtotime( "+ 5 days" )) . ':</span> ';
-		echo "</td>";
-		echo "<td>";
-		echo round($data['list'][5]['main']['temp'], 0) . "°C, ";
-		echo $data['list'][5]['weather'][0]['description'] . ", ";
-		echo $data['list'][5]['wind']['speed'] . " m/s";
-		echo "</td>";
+		for ($i = 1; $i <= 6; $i++) {
+			echo "<tr>";
+			echo "<td>";
+			echo ' <span style="color: gray;">' . date("l", strtotime("+ $i day")) . ':</span> ';
+			echo "</td>";
+			echo "<td style='text-align: left'>";
+			echo "<span style='color: #03a9f4;'>" . round($data['list'][$i]['temp']['day'], 0) . "°C</span> ";
+			echo $data['list'][$i]['weather'][0]['description'] . " ";
+			echo "<span style='color: #26a69a;'>" . $data['list'][$i]['speed'] . " m/s</span> ";
+			echo "<span style='color: #ff9800;'>&#8593;" . date("H:i", $data['list'][$i]['sunrise']) . " ";
+			echo "&#8595;" . date("H:i", $data['list'][$i]['sunset']) . "</span>";
+			echo "</td>";
+			echo "</tr>";
+		}
 		echo "</tr>";
 		echo "</table>";
 		?>

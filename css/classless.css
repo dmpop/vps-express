@@ -16,7 +16,7 @@ Table of Contents:
 	font-family: 'Barlow';
 	font-style: normal;
 	font-weight: 400;
-	src: url('font/Barlow-Regular.woff2') format('woff2');
+	src: url('../font/Barlow-Regular.woff2') format('woff2');
 }
 
 :root, html[data-theme='light'] {
