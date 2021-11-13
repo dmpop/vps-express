@@ -1,10 +1,6 @@
 # VPS Express
 
-VPS Express includes two parts:
-
-- A shell script that automates the process of setting up an Ubuntu-based virtual private server.
-- A super simple landing page I cobbled together for my [TinyVPS](https://tinyvps.xyz/) virtual private server. The page is a mix of good old HTML and equally good old PHP. The page features a number of configurable options.
-
+VPS Express is a shell script that automates the process of setting up an Ubuntu-based virtual private server.
 ## Author
 
 Dmitri Popov [dmpop@linux.com](mailto:dmpop@linux.com)
