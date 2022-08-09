@@ -44,7 +44,6 @@ echo "" >> /etc/apache2/sites-available/$domain_name.conf
 echo "DocumentRoot /var/www/html/$domain_name" >> /etc/apache2/sites-available/$domain_name.conf
 echo "ServerName $domain_name" >> /etc/apache2/sites-available/$domain_name.conf
 echo "ServerAlias $domain_name" >> /etc/apache2/sites-available/$domain_name.conf
-echo "Redirect permanent / https://$domain_name" >> /etc/apache2/sites-available/$domain_name.conf
 echo "" >> /etc/apache2/sites-available/$domain_name.conf
 echo "<Directory /var/www/html/$domain_name/>" >> /etc/apache2/sites-available/$domain_name.conf
 echo "Options FollowSymlinks" >> /etc/apache2/sites-available/$domain_name.conf
