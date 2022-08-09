@@ -13,7 +13,7 @@ fi
 
 apt update
 apt upgrade
-apt install apache2 php libapache2-mod-php
+apt install apache2 php libapache2-mod-php php-gd
 apt install certbot python3-certbot-apache
 apt install git fail2ban
 
